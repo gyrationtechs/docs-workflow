@@ -1,0 +1,238 @@
+name: OpenAPI Validation and Documentation
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'api/**'
+      - '.spectral.yaml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'api/**'
+      - '.spectral.yaml'
+
+jobs:
+  validate-openapi:
+    name: Validate OpenAPI Specification
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install Spectral
+        run: npm install -g @stoplight/spectral-cli
+        
+      - name: Validate OpenAPI spec with Spectral
+        run: |
+          spectral lint api/openapi.yaml --config .spectral.yaml --format json --output spectral-results.json
+          
+      - name: Upload Spectral results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: spectral-results
+          path: spectral-results.json
+          retention-days: 30
+          
+      - name: Comment PR with Spectral results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            try {
+              const spectralOutput = fs.readFileSync('spectral-results.json', 'utf8');
+              const results = JSON.parse(spectralOutput);
+              
+              if (results.length > 0) {
+                let comment = '## Spectral OpenAPI Validation Results\n\n';
+                comment += '❌ **Issues found in OpenAPI specification:**\n\n';
+                
+                results.forEach(result => {
+                  comment += `### ${result.source}\n`;
+                  comment += `- **Line ${result.range.start.line}:** ${result.message} (${result.code})\n`;
+                  comment += `- **Severity:** ${result.severity}\n\n`;
+                });
+                
+                comment += '\nPlease fix these issues before merging.';
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              } else {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: '## Spectral OpenAPI Validation Results\n\n✅ **No OpenAPI specification issues found!**'
+                });
+              }
+            } catch (error) {
+              console.log('No spectral results file found or error reading results');
+            }
+
+  generate-docs:
+    name: Generate and Deploy API Documentation
+    runs-on: ubuntu-latest
+    needs: validate-openapi
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install Redocly CLI
+        run: npm install -g @redocly/cli
+        
+      - name: Generate API documentation
+        run: |
+          redocly build-docs api/openapi.yaml -o docs/api-reference.html
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Upload documentation
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        
+      - name: Create index.html
+        run: |
+          cat > docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Task Management API Documentation</title>
+              <style>
+                  body {
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                      max-width: 800px;
+                      margin: 0 auto;
+                      padding: 2rem;
+                      line-height: 1.6;
+                  }
+                  h1 {
+                      color: #333;
+                      border-bottom: 2px solid #007acc;
+                      padding-bottom: 0.5rem;
+                  }
+                  .nav {
+                      background: #f5f5f5;
+                      padding: 1rem;
+                      border-radius: 8px;
+                      margin: 2rem 0;
+                  }
+                  .nav a {
+                      display: inline-block;
+                      margin-right: 1rem;
+                      color: #007acc;
+                      text-decoration: none;
+                      font-weight: 500;
+                  }
+                  .nav a:hover {
+                      text-decoration: underline;
+                  }
+                  .feature {
+                      background: #e8f4fd;
+                      padding: 1rem;
+                      border-radius: 8px;
+                      margin: 1rem 0;
+                      border-left: 4px solid #007acc;
+                  }
+              </style>
+          </head>
+          <body>
+              <h1>Task Management API Documentation</h1>
+              
+              <div class="nav">
+                  <a href="api-reference.html">API Reference</a>
+                  <a href="https://github.com/${{ github.repository }}">GitHub Repository</a>
+              </div>
+              
+              <div class="feature">
+                  <h2>Welcome to the Task Management API</h2>
+                  <p>This is a comprehensive REST API for managing tasks, projects, and team collaboration. The API provides a robust set of endpoints for creating, reading, updating, and deleting tasks and projects.</p>
+              </div>
+              
+              <h2>Quick Start</h2>
+              <p>To get started with the API:</p>
+              <ol>
+                  <li>Review the <a href="api-reference.html">API Reference</a> for detailed endpoint documentation</li>
+                  <li>Check out the <a href="https://github.com/${{ github.repository }}">GitHub repository</a> for examples and SDKs</li>
+                  <li>Read the <a href="https://github.com/${{ github.repository }}/blob/main/docs/getting-started.md">Getting Started Guide</a></li>
+              </ol>
+              
+              <h2>Features</h2>
+              <ul>
+                  <li><strong>Task Management:</strong> Create, read, update, and delete tasks</li>
+                  <li><strong>Project Organization:</strong> Organize tasks into projects</li>
+                  <li><strong>Team Collaboration:</strong> Assign tasks to team members</li>
+                  <li><strong>Priority Levels:</strong> Set task priorities (low, medium, high, urgent)</li>
+                  <li><strong>Status Tracking:</strong> Track task status (todo, in_progress, completed, cancelled)</li>
+                  <li><strong>RESTful Design:</strong> Follows REST API best practices</li>
+                  <li><strong>Authentication:</strong> Secure JWT-based authentication</li>
+                  <li><strong>Rate Limiting:</strong> Built-in rate limiting for fair usage</li>
+              </ul>
+              
+              <h2>Authentication</h2>
+              <p>All API requests require authentication using JWT tokens. Include your token in the Authorization header:</p>
+              <pre><code>Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+              
+              <h2>Base URL</h2>
+              <p>All API endpoints are relative to:</p>
+              <pre><code>https://api.taskmanager.com/v1</code></pre>
+              
+              <div class="feature">
+                  <h3>Need Help?</h3>
+                  <p>If you need assistance or have questions about the API:</p>
+                  <ul>
+                      <li>Check the <a href="https://github.com/${{ github.repository }}/issues">GitHub Issues</a></li>
+                      <li>Review the <a href="https://github.com/${{ github.repository }}/blob/main/docs/api-guide.md">API Guide</a></li>
+                      <li>Contact support at api-support@taskmanager.com</li>
+                  </ul>
+              </div>
+          </body>
+          </html>
+          EOF
+          
+      - name: Upload updated documentation
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 

@@ -1,0 +1,40 @@
+{
+  "name": "task-management-api-docs",
+  "version": "1.0.0",
+  "description": "Documentation for Task Management API with automated validation and deployment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vale": "vale docs/ *.md",
+    "spectral": "spectral lint api/openapi.yaml",
+    "build-docs": "redocly build-docs api/openapi.yaml -o docs/api-reference.html",
+    "serve-docs": "redocly serve api/openapi.yaml",
+    "validate": "npm run vale && npm run spectral"
+  },
+  "keywords": [
+    "api",
+    "documentation",
+    "openapi",
+    "vale",
+    "spectral",
+    "redocly",
+    "docs-as-code"
+  ],
+  "author": "API Documentation Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@redocly/cli": "^1.0.0",
+    "@stoplight/spectral-cli": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/task-management-api-docs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/task-management-api-docs/issues"
+  },
+  "homepage": "https://your-username.github.io/task-management-api-docs/"
+} 
