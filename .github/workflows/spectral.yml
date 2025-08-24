@@ -1,16 +1,12 @@
-name: OpenAPI Validation and Documentation
+name: OpenAPI Linting
 
 on:
   push:
     branches: [ main, master ]
-    paths:
-      - 'api/**'
-      - '.spectral.yaml'
+
   pull_request:
     branches: [ main, master ]
-    paths:
-      - 'api/**'
-      - '.spectral.yaml'
+
 
 jobs:
   validate-openapi:
