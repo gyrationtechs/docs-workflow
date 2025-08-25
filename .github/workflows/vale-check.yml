@@ -34,7 +34,7 @@ jobs:
             
       - name: Run Vale
         run: |
-          vale --config=.vale.ini docs/ *.md
+          vale --config=../../.vale.ini docs/ *.md
           
       - name: Upload Vale results
         uses: actions/upload-artifact@v4
