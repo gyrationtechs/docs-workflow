@@ -7,6 +7,8 @@ on:
   # Tiggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,6 +25,7 @@ jobs:
       uses: errata-ai/vale-action@v2.1.1
       with:
         debug: true
+        fail_on_error: true
         styles: |
           https://github.com/errata-ai/write-good/releases/latest/download/write-good.zip
           https://github.com/errata-ai/Google/releases/latest/download/Google.zip
