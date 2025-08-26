@@ -11,6 +11,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+  permissions:
+    contents: write
+
 
 jobs:
   review:
@@ -22,10 +25,55 @@ jobs:
     - name: Vale Check
       uses: errata-ai/vale-action@v2.1.1
       with:
-        # debug: true
+        debug: true
         fail_on_error: true
         reporter: 'github-pr-review'
         
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
+  
+  comment-report:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Install Vale (CLI)
+      run: |
+        curl -fsSL https://raw.githubusercontent.com/errata-ai/vale/master/scripts/install.sh | sh
+
+    - name: Run Vale and save reports
+      run: |
+        ./bin/vale --version
+        ./bin/vale docs/ --output=JSON . > vale-report.json || true
+        ./bin/vale --output=TTY . | tee vale-report.txt || true
+
+    - name: Upload Vale reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: vale-reports
+        path: |
+          vale-report.json
+          vale-report.txt
+
+    - name: Comment Vale report on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = 'vale-report.txt';
+          let body = 'No Vale output generated.';
+          try {
+            body = fs.readFileSync(path, 'utf8');
+          } catch (e) {
+            core.warning('vale-report.txt not found; skipping detailed comment.');
+          }
+          const truncated = body.length > 60000 ? body.slice(0, 60000) + '\n\n[truncated]' : body;
+          await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            body: `Vale report (text) for this PR (non-blocking summary):\n\n\`\`\`\n${truncated}\n\`\`\``
+          }); 
   

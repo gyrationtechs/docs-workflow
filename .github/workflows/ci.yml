@@ -16,5 +16,5 @@ jobs:
       - name: Check links
         uses: tcort/github-action-markdown-link-check@v1
         with:
-          folder-path: 'docs/*'
+          folder-path: 'docs/'
         
