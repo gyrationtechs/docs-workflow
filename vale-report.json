@@ -1,0 +1,254 @@
+{
+  "docs/api-guide.md": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        27,
+        32
+      ],
+      "Check": "WTH.Condescending",
+      "Description": "",
+      "Link": "https://path/to/style.com",
+      "Message": "Using 'simple' may come across as condescending.",
+      "Severity": "error",
+      "Match": "simple",
+      "Line": 7
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        38,
+        41
+      ],
+      "Check": "WTH.Condescending",
+      "Description": "",
+      "Link": "https://path/to/style.com",
+      "Message": "Using 'easy' may come across as condescending.",
+      "Severity": "error",
+      "Match": "easy",
+      "Line": 7
+    }
+  ],
+  "docs/getting-started.md": [
+    {
+      "Action": {
+        "Name": "suggest",
+        "Params": [
+          "spellings"
+        ]
+      },
+      "Span": [
+        4,
+        7
+      ],
+      "Check": "Vale.Spelling",
+      "Description": "",
+      "Link": "",
+      "Message": "Did you really mean 'SDKs'?",
+      "Severity": "error",
+      "Match": "SDKs",
+      "Line": 56
+    },
+    {
+      "Action": {
+        "Name": "suggest",
+        "Params": [
+          "spellings"
+        ]
+      },
+      "Span": [
+        21,
+        24
+      ],
+      "Check": "Vale.Spelling",
+      "Description": "",
+      "Link": "",
+      "Message": "Did you really mean 'sdks'?",
+      "Severity": "error",
+      "Match": "sdks",
+      "Line": 58
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        10,
+        15
+      ],
+      "Check": "WTH.Condescending",
+      "Description": "",
+      "Link": "https://path/to/style.com",
+      "Message": "Using 'simple' may come across as condescending.",
+      "Severity": "error",
+      "Match": "simple",
+      "Line": 67
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        22,
+        24
+      ],
+      "Check": "WTH.custom-rules",
+      "Description": "",
+      "Link": "",
+      "Message": "Use 'API' instead of 'api'",
+      "Severity": "warning",
+      "Match": "api",
+      "Line": 93
+    }
+  ],
+  "docs/test.md": [
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        5,
+        16
+      ],
+      "Check": "WTH.custom-rules",
+      "Description": "",
+      "Link": "",
+      "Message": "Use 'WriteTech Hub' instead of 'writetechhub'",
+      "Severity": "warning",
+      "Match": "writetechhub",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "suggest",
+        "Params": [
+          "spellings"
+        ]
+      },
+      "Span": [
+        5,
+        16
+      ],
+      "Check": "Vale.Spelling",
+      "Description": "",
+      "Link": "",
+      "Message": "Did you really mean 'writetechhub'?",
+      "Severity": "error",
+      "Match": "writetechhub",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        158,
+        161
+      ],
+      "Check": "WTH.custom-rules",
+      "Description": "",
+      "Link": "",
+      "Message": "Use 'Vale' instead of 'vale'",
+      "Severity": "warning",
+      "Match": "vale",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        198,
+        205
+      ],
+      "Check": "WTH.custom-rules",
+      "Description": "",
+      "Link": "",
+      "Message": "Use 'website' instead of 'web-site'",
+      "Severity": "warning",
+      "Match": "web-site",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        213,
+        218
+      ],
+      "Check": "WTH.custom-rules",
+      "Description": "",
+      "Link": "",
+      "Message": "Use 'email' instead of 'e-mail'",
+      "Severity": "warning",
+      "Match": "e-mail",
+      "Line": 1
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        6,
+        15
+      ],
+      "Check": "WTH.DisAllow",
+      "Description": "",
+      "Link": "https://example.com/rule",
+      "Message": "Don't use 'word press'",
+      "Severity": "error",
+      "Match": "word press",
+      "Line": 3
+    },
+    {
+      "Action": {
+        "Name": "suggest",
+        "Params": [
+          "spellings"
+        ]
+      },
+      "Span": [
+        124,
+        132
+      ],
+      "Check": "Vale.Spelling",
+      "Description": "",
+      "Link": "",
+      "Message": "Did you really mean 'wordpress'?",
+      "Severity": "error",
+      "Match": "wordpress",
+      "Line": 3
+    },
+    {
+      "Action": {
+        "Name": "",
+        "Params": null
+      },
+      "Span": [
+        124,
+        132
+      ],
+      "Check": "WTH.custom-rules",
+      "Description": "",
+      "Link": "",
+      "Message": "Use 'WordPress' instead of 'wordpress'",
+      "Severity": "warning",
+      "Match": "wordpress",
+      "Line": 3
+    }
+  ]
+}

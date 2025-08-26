@@ -45,8 +45,8 @@ jobs:
     - name: Run Vale and save reports
       run: |
         ./bin/vale --version
-        ./bin/vale docs/ --output=JSON . > vale-report.json || true
-        ./bin/vale --output=TTY . | tee vale-report.txt || true
+        ./bin/vale --output=JSON docs/ > vale-report.json || true
+        ./bin/vale --output=TTY docs/ | tee vale-report.txt || true
 
     - name: Upload Vale reports
       uses: actions/upload-artifact@v4
@@ -76,4 +76,6 @@ jobs:
             issue_number: context.payload.pull_request.number,
             body: `Vale report (text) for this PR (non-blocking summary):\n\n\`\`\`\n${truncated}\n\`\`\``
           }); 
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
   
