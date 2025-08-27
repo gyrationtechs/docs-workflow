@@ -21,6 +21,8 @@ jobs:
 
       # Run Spectral
       - uses: stoplightio/spectral-action@latest
+        with:
+          file_glob: 'api/*.yaml'
 
   publish:
     name: Publish to GitHub Pages
