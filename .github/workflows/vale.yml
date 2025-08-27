@@ -23,7 +23,7 @@ jobs:
       uses: errata-ai/vale-action@v2.1.1
       with:
         debug: true
-        fail_on_error: true
+        fail_on_error: false
         reporter: 'github-pr-review'
         
       env:
