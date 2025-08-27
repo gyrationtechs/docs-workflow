@@ -16,6 +16,12 @@ servers:
   - url: https://staging-api.taskmanager.com/v1
     description: Staging server
 
+# tags:
+#   - name: Tasks
+#     description: Operations related to tasks
+#   - name: Projects
+#     description: Operations related to projects
+
 paths:
   /tasks:
     get:
