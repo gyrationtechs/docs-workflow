@@ -38,46 +38,46 @@ jobs:
           path: spectral-results.json
           retention-days: 30
           
-      - name: Comment PR with Spectral results
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
+      # - name: Comment PR with Spectral results
+      #   if: github.event_name == 'pull_request'
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       const fs = require('fs');
             
-            try {
-              const spectralOutput = fs.readFileSync('spectral-results.json', 'utf8');
-              const results = JSON.parse(spectralOutput);
+      #       try {
+      #         const spectralOutput = fs.readFileSync('spectral-results.json', 'utf8');
+      #         const results = JSON.parse(spectralOutput);
               
-              if (results.length > 0) {
-                let comment = '## Spectral OpenAPI Validation Results\n\n';
-                comment += '❌ **Issues found in OpenAPI specification:**\n\n';
+      #         if (results.length > 0) {
+      #           let comment = '## Spectral OpenAPI Validation Results\n\n';
+      #           comment += '❌ **Issues found in OpenAPI specification:**\n\n';
                 
-                results.forEach(result => {
-                  comment += `### ${result.source}\n`;
-                  comment += `- **Line ${result.range.start.line}:** ${result.message} (${result.code})\n`;
-                  comment += `- **Severity:** ${result.severity}\n\n`;
-                });
+      #           results.forEach(result => {
+      #             comment += `### ${result.source}\n`;
+      #             comment += `- **Line ${result.range.start.line}:** ${result.message} (${result.code})\n`;
+      #             comment += `- **Severity:** ${result.severity}\n\n`;
+      #           });
                 
-                comment += '\nPlease fix these issues before merging.';
+      #           comment += '\nPlease fix these issues before merging.';
                 
-                github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: comment
-                });
-              } else {
-                github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: '## Spectral OpenAPI Validation Results\n\n✅ **No OpenAPI specification issues found!**'
-                });
-              }
-            } catch (error) {
-              console.log('No spectral results file found or error reading results');
-            }
+      #           github.rest.issues.createComment({
+      #             issue_number: context.issue.number,
+      #             owner: context.repo.owner,
+      #             repo: context.repo.repo,
+      #             body: comment
+      #           });
+      #         } else {
+      #           github.rest.issues.createComment({
+      #             issue_number: context.issue.number,
+      #             owner: context.repo.owner,
+      #             repo: context.repo.repo,
+      #             body: '## Spectral OpenAPI Validation Results\n\n✅ **No OpenAPI specification issues found!**'
+      #           });
+      #         }
+      #       } catch (error) {
+      #         console.log('No spectral results file found or error reading results');
+      #       }
 
   generate-docs:
     name: Generate and Deploy API Documentation
