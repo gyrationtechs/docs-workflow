@@ -11,6 +11,10 @@ jobs:
   api-linting:
     name: Run Spectral
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
     steps:
       # Check out the repository
       - uses: actions/checkout@v3
