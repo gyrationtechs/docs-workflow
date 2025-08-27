@@ -55,7 +55,7 @@ The API uses standard HTTP status codes and returns detailed error messages in J
 
 ## SDKs and Libraries
 
-We provide official SDKs for popular programming languages:
+We provide official sdks for popular programming languages:
 
 - **JavaScript/Node.js**: `npm install @taskmanager/api`
 - **Python**: `pip install taskmanager-api`

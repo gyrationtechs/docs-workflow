@@ -1,0 +1,17 @@
+extends: existence
+message: Using '%s' may come across as condescending.
+link: https://path/to/style.com
+level: error
+ignorecase: true
+tokens:
+  - obvious
+  - obviously
+  - simple
+  - simply
+  - easy
+  - easily
+  - of course
+  - clearly
+  - everyone knows
+  - common sense
+  - common knowledge

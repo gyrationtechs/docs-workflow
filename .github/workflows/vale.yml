@@ -5,7 +5,7 @@ name: Vale-Linting
 # Event to trigger when the action is run
 on:
   # Tiggers the workflow on push or pull request events but only for the main branch
-  push:
+  pull_request:
     branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -23,10 +23,10 @@ jobs:
       uses: errata-ai/vale-action@v2.1.1
       with:
         debug: true
-        styles: |
-          https://github.com/errata-ai/write-good/releases/latest/download/write-good.zip
-          https://github.com/errata-ai/Google/releases/latest/download/Google.zip
-          https://github.com/errata-ai/Joblint/releases/download/v0.4.1/Joblint.zip
+        fail_on_error: false
+        reporter: 'github-pr-review'
+        
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
+  
   
