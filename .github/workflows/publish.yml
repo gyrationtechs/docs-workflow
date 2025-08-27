@@ -38,11 +38,24 @@ jobs:
 
       - run: npx @redocly/cli build-docs api/openapi.yaml -o api/reference.html
 
-      - uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./api
+      - name: Commit generated API reference
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add api/reference.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(docs): update generated API reference [skip ci]"
+            git push
+          fi
+
+      # - uses: peaceiris/actions-gh-pages@v3
+      #   if: github.ref == 'refs/heads/main'
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./api
 
 
 
