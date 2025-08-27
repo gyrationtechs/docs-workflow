@@ -24,7 +24,7 @@ servers:
 
 paths:
   /tasks:
-    get:
+    getting:
       summary: Get all tasks
       description: Retrieve a paginated list of tasks
       operationId: getTasks
