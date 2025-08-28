@@ -1,0 +1,21 @@
+type:docs:
+  - changed-files:
+      - any-glob-to-any-file: ['docs/**']
+  - changed-files:
+      - any-glob-to-any-file: ['**/*.md']
+  - changed-files:
+      - any-glob-to-any-file: ['README*']
+
+type:api:
+  - changed-files:
+      - any-glob-to-any-file: ['api/**']
+  - changed-files:
+      - any-glob-to-any-file: ['**/*.yaml']
+
+area:reference:
+  - changed-files:
+      - any-glob-to-any-file: ['api/reference.html']
+
+area:guides:
+  - changed-files:
+      - any-glob-to-any-file: ['docs/guides/**'] 

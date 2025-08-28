@@ -1,0 +1,55 @@
+name: Auto Label & Triage (Docs)
+
+on:
+  pull_request_target:
+    types: [opened, edited, synchronize, reopened]
+  issues:
+    types: [opened, edited, reopened]
+  schedule:
+    - cron: '0 2 * * *'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  pr-labeler:
+    name: PR Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+
+  issue-labeler:
+    name: Issue Labeler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: github/issue-labeler@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/issue-labeler.yml
+          enable-versioned-regex: 0
+
+  stale:
+    name: Stale Issues and PRs
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-stale: 30
+          days-before-close: 7
+          days-before-pr-stale: 14
+          days-before-pr-close: 7
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+          exempt-issue-labels: 'priority:P0,priority:P1,needs:spec-decision'
+          exempt-pr-labels: 'priority:P0,priority:P1'
+          stale-issue-message: |
+            This issue has been marked as stale due to inactivity for 30 days. It will be closed in 7 days if no further activity occurs.
+          stale-pr-message: |
+            This PR has been marked as stale due to inactivity for 14 days. It will be closed in 7 days if no further activity occurs. 

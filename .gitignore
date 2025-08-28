@@ -86,3 +86,6 @@ temp/
 PROJECT_SUMMARY.md 
 SETUP.md
 .vale.ini.old
+
+SESSION.md
+spectral-report.json
