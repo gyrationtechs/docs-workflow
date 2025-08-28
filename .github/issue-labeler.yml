@@ -1,0 +1,16 @@
+type:docs:
+  - '(?i)docs?'
+  - '(?i)documentation'
+  - '(?i)readme'
+  - '(?i)guide|tutorial|how to'
+  - '(?i)typo|grammar'
+
+type:api:
+  - '(?i)openapi|oai|swagger'
+  - '(?i)api|endpoint|schema|spec'
+
+area:reference:
+  - '(?i)reference'
+
+area:guides:
+  - '(?i)guide|tutorial' 
